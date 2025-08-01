@@ -3,7 +3,6 @@ import NewDocumentButton from "./NewDocumentButton";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -12,29 +11,36 @@ import { MenuIcon } from "lucide-react";
 
 const Sidebar = () => {
   const menuOptions = (
-    <>
+    <div className="space-y-4">
       <NewDocumentButton />
-    </>
+      {/* Add more menu buttons here if needed */}
+    </div>
   );
+
   return (
-    <div className="p-2 md:p-5 bg-gray-200 relative">
+    <aside className="p-4 md:p-6 bg-gray-100 min-h-screen shadow-md">
+      {/* Mobile Menu */}
       <div className="md:hidden">
         <Sheet>
-          <SheetTrigger>
-            <MenuIcon className="p-2 hover:opacity-30 rounded-lg" size={40} />
+          <SheetTrigger className="focus:outline-none">
+            <MenuIcon
+              className="text-gray-700 hover:opacity-70 transition-opacity rounded-lg"
+              size={36}
+            />
           </SheetTrigger>
 
-          <SheetContent side="left">
-            <SheetHeader>
-              <SheetTitle>Menu</SheetTitle>
-              <div>{menuOptions}</div>
+          <SheetContent side="left" className="bg-white w-64">
+            <SheetHeader className="mb-4">
+              <SheetTitle className="text-xl font-bold text-gray-800">Menu</SheetTitle>
             </SheetHeader>
+            {menuOptions}
           </SheetContent>
         </Sheet>
       </div>
 
-      <div className="hidden md:inline">{menuOptions}</div>
-    </div>
+      {/* Desktop Sidebar */}
+      <div className="hidden md:block">{menuOptions}</div>
+    </aside>
   );
 };
 

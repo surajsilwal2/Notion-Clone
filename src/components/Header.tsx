@@ -1,4 +1,5 @@
 "use client";
+
 import {
   SignInButton,
   SignedOut,
@@ -8,27 +9,34 @@ import {
 
 const Header = () => {
   const { user } = useUser();
-  
 
   return (
-    <div className="flex items-center justify-between p-5">
-      {user && (
-        <h1 className="text-2xl">
-          {user?.firstName}
-          {`'s`} Space
-        </h1>
-      )}
-
-      {/* Breadcrumbs */}
-
+    <header className="flex items-center justify-between px-6 py-4 bg-white shadow-sm sticky top-0 z-50">
+      {/* Left: App Name or User Info */}
       <div>
+        {user && (
+          <h1 className="text-xl font-semibold text-gray-800">
+            {user.firstName}
+            {`'s`} Space
+          </h1>
+        )}
+      </div>
+
+       {/* Breadcrumbs */}
+
+      {/* Right: Auth Buttons */}
+      <div className="flex items-center gap-4">
         <SignedOut>
-          <SignInButton mode="modal" />
+          <SignInButton mode="modal">
+            <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition">
+              Sign In
+            </button>
+          </SignInButton>
         </SignedOut>
 
         {user && <UserButton />}
       </div>
-    </div>
+    </header>
   );
 };
 
