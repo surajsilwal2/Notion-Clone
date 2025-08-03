@@ -6,6 +6,7 @@ import {
   UserButton,
   useUser,
 } from "@clerk/nextjs";
+import Breadcrums from "./Breadcrums";
 
 const Header = () => {
   const { user } = useUser();
@@ -24,6 +25,7 @@ const Header = () => {
       </div>
 
        {/* Breadcrumbs */}
+       <Breadcrums />
 
       {/* Right: Auth Buttons */}
       <div className="flex items-center gap-4">
