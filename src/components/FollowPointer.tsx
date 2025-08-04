@@ -1,5 +1,6 @@
-import stringToColor from "@/lib/stringToColor";
-import { motion, AnimatePresence, useMotionValue } from "framer-motion";
+import stringToColor from "@/lib/stringToColor"; // utility: generates a color string based on the user's email
+
+import { motion, AnimatePresence, useMotionValue } from "framer-motion"; // framer motion for animation
 
 const FollowPointer = ({
   x,
@@ -14,14 +15,15 @@ const FollowPointer = ({
     avatar: string;
   };
 }) => {
+  // generate a unique color for the user using their email
   const color = stringToColor(info.email || "1");
   return (
     <motion.div
       className="h-4 w-4 rounded-full absolute z-50"
       style={{
-        top: y,
-        left: x,
-        pointerEvents: "none",
+        top: y, // position vertically on the screen
+        left: x, // position horizontally on the screen
+        pointerEvents: "none", // so it doesn't interfere with clicks
       }}
       initial={{
         scale: 1,
@@ -36,6 +38,7 @@ const FollowPointer = ({
         opacity: 0,
       }}
     >
+      {/* svg icon representing a cursor (rotated for better appearance) */}
       <svg
         stroke={color}
         fill={color}
@@ -48,6 +51,8 @@ const FollowPointer = ({
       >
         <path d="M14.082 2.182a.5.5 0 0 1 .103.557L8.528 15.467a.5.5 0 0 1-.917-.007L5.57 10.694.803 8.652a.5.5 0 0 1-.006-.916l12.728-5.657a.5.5 0 0 1 .556.103z"></path>
       </svg>
+
+      {/* floating label showing user name or email */}
       <motion.div
         style={{
           backgroundColor: color,
