@@ -1,39 +1,56 @@
 "use client";
 
-import { useRoom } from "@liveblocks/react/suspense";
+// Import Liveblocks room and collaboration dependencies
+import { useRoom, useSelf } from "@liveblocks/react/suspense";
 import { useEffect, useState } from "react";
-import * as Y from "yjs";
-import { LiveblocksYjsProvider } from "@liveblocks/yjs";
+import * as Y from "yjs"; // Shared doc structure (CRDT)
+
+import { LiveblocksYjsProvider } from "@liveblocks/yjs"; // Bridge between Yjs and Liveblocks
+
+// UI components
 import { Button } from "./ui/button";
 import { MoonIcon, SunIcon } from "lucide-react";
+
+// BlockNote rich-text editor
 import { BlockNoteView } from "@blocknote/shadcn";
 import { BlockNoteEditor } from "@blocknote/core";
 import { useCreateBlockNote } from "@blocknote/react";
+
+// Required fonts and styles
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/shadcn/style.css";
-import { useSelf } from "@liveblocks/react/suspense";
+
+// Helper to generate consistent color from user email
 import stringToColor from "@/lib/stringToColor";
 
+
+// props shared to BlockNote component
 type EditorProps = {
   doc: Y.Doc;
   provider: any;
   darkMode: boolean;
 };
 
+// BlockNote wrapper for rendering collaborative editor
 function BlockNote({ doc, provider, darkMode }: EditorProps) {
+  const userInfo = useSelf((me) => me.info); // get current user info from liveblocks
 
-  const userInfo = useSelf(me => me.info)
-
+  //provide collaboration config only if userInfo is ready
   const editor: BlockNoteEditor = useCreateBlockNote({
-    collaboration: {
-      provider,
-      fragment: doc.getXmlFragment('document-store'),
-      user: {
-        name: userInfo?.name,
-        color: stringToColor(userInfo?.email)
-      }
-    }
-  })
+    collaboration: userInfo?.email
+      ? {
+          provider,
+          fragment: doc.getXmlFragment("document-store"),
+          user: {
+            name: userInfo?.name,
+            color: stringToColor(userInfo?.email),
+          },
+        }
+      : undefined,
+  });
+
+  // 💡 Skip rendering if editor or userInfo is not ready
+  if (!editor || !userInfo?.email) return null;
 
   return (
     <div className="relative max-w-6xl mx-auto">
@@ -46,24 +63,28 @@ function BlockNote({ doc, provider, darkMode }: EditorProps) {
   );
 }
 
+// the main Editor component that initializes Liveblocks+Yjs connection
 const Editor = () => {
-  const room = useRoom();
-  const [doc, setDoc] = useState<Y.Doc>();
-  const [provider, setProvider] = useState<LiveblocksYjsProvider>();
+  const room = useRoom(); //liveblocks room context
+  const [doc, setDoc] = useState<Y.Doc>(); // Yjs shared document
+  const [provider, setProvider] = useState<LiveblocksYjsProvider>(); // provider that connects Yjs to Liveblocks
   const [darkMode, setDarkMode] = useState(false);
 
+  //setup document and provider when room is ready
   useEffect(() => {
     const yDoc = new Y.Doc();
     const yProvider = new LiveblocksYjsProvider(room, yDoc);
     setDoc(yDoc);
     setProvider(yProvider);
 
+    // clean up on unmount
     return () => {
       yDoc?.destroy();
       yProvider?.destroy();
     };
   }, [room]);
 
+  // wait until doc + provider are ready
   if (!doc || !provider) {
     return null;
   }
