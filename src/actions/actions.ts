@@ -51,10 +51,8 @@ export async function createNewDocument() {
   return { docId: docRef.id };
 }
 
-
 // deleting a document from firestore, removes all user room references, and deletes the liveblocks room
 export async function deleteDocument(roomId: string) {
-  
   // ensures only authenticated users can call this
   auth.protect();
 
@@ -70,7 +68,7 @@ export async function deleteDocument(roomId: string) {
 
     const batch = adminDb.batch(); // Firestore batched writes provide a mechanism to perform multiple write operations (set, update, or delete) atomically as a single unit. This means that either all operations within the batch succeed, or if any operation fails, the entire batch is rolled back, and no changes are applied. This ensures data consistency and prevents partial updates.
 
-    //step 3:  delete every 'room' subdocument that references  this room 
+    //step 3:  delete every 'room' subdocument that references  this room
     query.docs.forEach((doc) => {
       batch.delete(doc.ref);
     });
@@ -81,6 +79,28 @@ export async function deleteDocument(roomId: string) {
     //step 5:  delete the Liveblocks room(realtime session)
     await liveblocks.deleteRoom(roomId);
 
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+    return { success: false };
+  }
+}
+
+export async function inviteUserToDocument(roomId: string, email: string) {
+  auth.protect();
+
+  try {
+    await adminDb
+      .collection("users")
+      .doc(email)
+      .collection("rooms")
+      .doc(roomId)
+      .set({
+        userId: email,
+        role: "editor",
+        createdAt: new Date(),
+        roomId,
+      });
     return { success: true };
   } catch (error) {
     console.error(error);
