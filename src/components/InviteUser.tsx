@@ -73,7 +73,7 @@ const InviteUser = () => {
             <Button variant={'outline'}
               type="submit"
               disabled={!email || isPending}
-              className={`text-xl  font-semibold px-5  py-2 rounded-md shadow-sm hover:bg-black disabled:opacity-60 disabled:cursor-not-allowed`}
+              className={`text-xl  font-semibold px-5  py-2 rounded-md shadow-sm hover:bg-black hover:text-white disabled:opacity-60 disabled:cursor-not-allowed`}
             >
               {isPending ? "Inviting..." : "Invite"}
             </Button>

@@ -10,6 +10,7 @@ import Editor from "./Editor";
 import useOwner from "@/lib/useOwner";
 import DeleteDocument from "./DeleteDocument";
 import InviteUser from "./InviteUser";
+import ManageUsers from "./ManageUsers";
 
 const Document = ({ id }: { id: string }) => {
   const [data, loading, error] = useDocumentData(doc(db, "documents", id));
@@ -37,7 +38,8 @@ const Document = ({ id }: { id: string }) => {
 
   if (loading) return <p className="p-5 text-gray-500">Loading document...</p>;
 
-  if (error) return <p className="p-5 text-red-500">Failed to load document.</p>;
+  if (error)
+    return <p className="p-5 text-red-500">Failed to load document.</p>;
 
   return (
     <div className="flex-1 bg-white h-full p-5">
@@ -64,7 +66,8 @@ const Document = ({ id }: { id: string }) => {
         </form>
       </div>
 
-      <div>
+      <div className="flex max-w-6xl mx-auto justify-between items-center mb-5">
+        <ManageUsers />
         {/* ManageUsers */}
 
         {/* Avatars */}
