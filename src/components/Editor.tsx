@@ -22,6 +22,7 @@ import "@blocknote/shadcn/style.css";
 
 // Helper to generate consistent color from user email
 import stringToColor from "@/lib/stringToColor";
+import TranslateDocument from "./TranslateDocument";
 
 
 // props shared to BlockNote component
@@ -99,6 +100,7 @@ const Editor = () => {
     <div className="max-w-6xl mx-auto">
       <div className="flex items-center gap-2 justify-end mb-10">
         {/* TranslateDocument AI */}
+        <TranslateDocument doc={doc} />
         {/* ChatToDocument AI */}
 
         {/* DarkMode */}
