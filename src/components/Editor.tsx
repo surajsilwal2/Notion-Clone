@@ -23,6 +23,7 @@ import "@blocknote/shadcn/style.css";
 // Helper to generate consistent color from user email
 import stringToColor from "@/lib/stringToColor";
 import TranslateDocument from "./TranslateDocument";
+import ChatToDocument from "./ChatToDocument";
 
 
 // props shared to BlockNote component
@@ -102,6 +103,7 @@ const Editor = () => {
         {/* TranslateDocument AI */}
         <TranslateDocument doc={doc} />
         {/* ChatToDocument AI */}
+        <ChatToDocument doc={doc} />
 
         {/* DarkMode */}
         <Button className={style} onClick={() => setDarkMode(!darkMode)}>
